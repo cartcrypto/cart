@@ -1,0 +1,15 @@
+# http://standards.freedesktop.org/desktop-entry-spec/desktop-entry-spec-1.0.html
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=cart Coin
+Comment=cart Coin QT main network
+GenericName=cart Digital Currency QT client main network
+Exec=cart-core.qt %u
+Terminal=false
+Type=Application
+Icon=${SNAP}/share/pixmaps/cart.png
+MimeType=x-scheme-handler/cart;
+Categories=X-Office;X-Finance;
+Keywords=internet;cart;zcart;cart;core;wallet;qt;main;snap;launchpad;crypto;digital;currency;coin;token;zerocoin;
+Version=1.0

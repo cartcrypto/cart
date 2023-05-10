@@ -1,0 +1,6 @@
+usr/local/bin/cart-qt usr/bin
+share/pixmaps/cart32.xpm usr/share/pixmaps
+share/pixmaps/cart16.xpm usr/share/pixmaps
+share/pixmaps/cart128.png usr/share/pixmaps
+debian/cart-qt.desktop usr/share/applications
+debian/cart-qt.protocol usr/share/kde4/services/

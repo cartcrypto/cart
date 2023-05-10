@@ -1,0 +1,3 @@
+usr/local/bin/cartd usr/bin
+usr/local/bin/cart-cli usr/bin
+debian/examples/cart.conf etc/cart

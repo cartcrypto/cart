@@ -1,0 +1,81 @@
+policy_module(cart, 1.100.1)
+
+########################################
+#
+# Declarations
+#
+
+type cart_t;
+type cart_exec_t;
+init_daemon_domain(cart_t, cart_exec_t)
+
+permissive cart_t;
+
+type cart_initrc_exec_t;
+init_script_file(cart_initrc_exec_t)
+
+type cart_conf_t;
+files_type(cart_conf_t)
+
+type cart_var_lib_t;
+files_type(cart_var_lib_t)
+
+type cart_var_run_t;
+files_type(cart_var_run_t)
+
+type cart_port_t;
+corenet_port(cart_port_t)
+
+########################################
+#
+# cart local policy
+#
+allow cart_t self:process { fork };
+
+allow cart_t self:fifo_file rw_fifo_file_perms;
+allow cart_t self:unix_stream_socket create_stream_socket_perms;
+
+manage_dirs_pattern(cart_t, cart_conf_t, cart_conf_t)
+manage_files_pattern(cart_t, cart_conf_t, cart_conf_t)
+
+manage_dirs_pattern(cart_t, cart_var_lib_t, cart_var_lib_t)
+manage_files_pattern(cart_t, cart_var_lib_t, cart_var_lib_t)
+files_var_lib_filetrans(cart_t, cart_var_lib_t, { dir file })
+
+manage_dirs_pattern(cart_t, cart_var_run_t, cart_var_run_t)
+manage_files_pattern(cart_t, cart_var_run_t, cart_var_run_t)
+
+sysnet_dns_name_resolve(cart_t)
+corenet_all_recvfrom_unlabeled(cart_t)
+
+allow cart_t self:tcp_socket create_stream_socket_perms;
+corenet_tcp_sendrecv_generic_if(cart_t)
+corenet_tcp_sendrecv_generic_node(cart_t)
+corenet_tcp_sendrecv_all_ports(cart_t)
+corenet_tcp_bind_generic_node(cart_t)
+
+gen_require(`
+    type cart_port_t;
+')
+allow cart_t cart_port_t:tcp_socket name_bind;
+
+gen_require(`
+    type cart_port_t;
+')
+allow cart_t cart_port_t:tcp_socket name_connect;
+
+domain_use_interactive_fds(cart_t)
+
+files_read_etc_files(cart_t)
+
+miscfiles_read_localization(cart_t)
+
+sysnet_dns_name_resolve(cart_t)
+
+allow cart_t cart_exec_t:file execute_no_trans;
+allow cart_t self:process setsched;
+corecmd_exec_ls(cart_t)
+corenet_tcp_connect_http_port(cart_t)
+dev_read_urand(cart_t)
+fs_getattr_xattr_fs(cart_t)
+kernel_read_system_state(cart_t)

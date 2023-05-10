@@ -1,0 +1,157 @@
+
+## <summary>policy for cart</summary>
+
+
+########################################
+## <summary>
+##	Transition to cart.
+## </summary>
+## <param name="domain">
+## <summary>
+##	Domain allowed to transition.
+## </summary>
+## </param>
+#
+interface(`cart_domtrans',`
+	gen_require(`
+		type cart_t, cart_exec_t;
+	')
+
+	corecmd_search_bin($1)
+	domtrans_pattern($1, cart_exec_t, cart_t)
+')
+
+
+########################################
+## <summary>
+##	Execute cart server in the cart domain.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`cart_initrc_domtrans',`
+	gen_require(`
+		type cart_initrc_exec_t;
+	')
+
+	init_labeled_script_domtrans($1, cart_initrc_exec_t)
+')
+
+
+########################################
+## <summary>
+##	Search cart lib directories.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`cart_search_lib',`
+	gen_require(`
+		type cart_var_lib_t;
+	')
+
+	allow $1 cart_var_lib_t:dir search_dir_perms;
+	files_search_var_lib($1)
+')
+
+########################################
+## <summary>
+##	Read cart lib files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`cart_read_lib_files',`
+	gen_require(`
+		type cart_var_lib_t;
+	')
+
+	files_search_var_lib($1)
+	read_files_pattern($1, cart_var_lib_t, cart_var_lib_t)
+')
+
+########################################
+## <summary>
+##	Manage cart lib files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`cart_manage_lib_files',`
+	gen_require(`
+		type cart_var_lib_t;
+	')
+
+	files_search_var_lib($1)
+	manage_files_pattern($1, cart_var_lib_t, cart_var_lib_t)
+')
+
+########################################
+## <summary>
+##	Manage cart lib directories.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`cart_manage_lib_dirs',`
+	gen_require(`
+		type cart_var_lib_t;
+	')
+
+	files_search_var_lib($1)
+	manage_dirs_pattern($1, cart_var_lib_t, cart_var_lib_t)
+')
+
+
+########################################
+## <summary>
+##	All of the rules required to administrate
+##	a cart environment
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+## <param name="role">
+##	<summary>
+##	Role allowed access.
+##	</summary>
+## </param>
+## <rolecap/>
+#
+interface(`cart_admin',`
+	gen_require(`
+		type cart_t;
+		type cart_initrc_exec_t;
+		type cart_var_lib_t;
+	')
+
+	allow $1 cart_t:process { ptrace signal_perms };
+	ps_process_pattern($1, cart_t)
+
+	cart_initrc_domtrans($1)
+	domain_system_change_exemption($1)
+	role_transition $2 cart_initrc_exec_t system_r;
+	allow $2 system_r;
+
+	files_search_var_lib($1)
+	admin_pattern($1, cart_var_lib_t)
+
+')
+

@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Name=cart Coin
+Comment=cart P2P Cryptocurrency
+Comment[fr]=cart, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=cart, eşten eşe kriptografik sanal para birimi
+Exec=cart-qt %u
+Terminal=false
+Type=Application
+Icon=cart128
+MimeType=x-scheme-handler/cart;
+Categories=Office;Finance;
+StartupWMClass=cart-qt

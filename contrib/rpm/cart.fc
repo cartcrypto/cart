@@ -1,0 +1,8 @@
+/usr/bin/cart-cli		--	gen_context(system_u:object_r:cart_exec_t,s0)
+/usr/sbin/cartd		--	gen_context(system_u:object_r:cart_exec_t,s0)
+/usr/lib(64)?/cart/cartd		--	gen_context(system_u:object_r:cart_exec_t,s0)
+
+/etc/cart(/.*)?		gen_context(system_u:object_r:cart_conf_t,s0)
+/var/lib/cart(/.*)?		gen_context(system_u:object_r:cart_var_lib_t,s0)
+
+(/var)?/run/cartd(/.*)?   gen_context(system_u:object_r:cart_var_run_t,s0)
